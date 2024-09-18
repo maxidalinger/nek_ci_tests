@@ -18,7 +18,7 @@
 
 [Outputs]
   csv = true
-  interval = 50
+  execute_on = final
   hide = 'drag area'
 []
 

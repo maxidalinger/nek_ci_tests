@@ -1,0 +1,9 @@
+[Tests]
+  [ktauChannel]
+    type = CSVDiff
+    input = nek.i
+    cli_args = '--nekrs-cimode'
+    requirement = 'The system shall reproduce the wall stress for turbulent channel flow with the k-tau RANS model.'
+    required_objects = 'NekRSProblem'
+  []
+[]

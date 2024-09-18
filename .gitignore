@@ -1,2 +1,8 @@
 *.cache/*
+*.jitcache/*
 *.log
+*.nek5000
+*0.f*
+*.dat
+*.csv
+*.e

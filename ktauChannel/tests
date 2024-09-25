@@ -4,6 +4,10 @@
     input = nek.i
     csvdiff = nek_out.csv
     cli_args = '--nekrs-cimode'
+
+    # mesh only contains 60 elements
+    max_parallel = 10
+
     requirement = 'The system shall reproduce the wall stress for turbulent channel flow with the k-tau RANS model.'
     required_objects = 'NekRSProblem'
   []

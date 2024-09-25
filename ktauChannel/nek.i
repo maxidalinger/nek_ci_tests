@@ -19,7 +19,7 @@
 [Outputs]
   csv = true
   execute_on = final
-  hide = 'drag area'
+  hide = 'drag area utau rel_err'
 []
 
 [Postprocessors]

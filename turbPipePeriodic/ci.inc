@@ -79,10 +79,11 @@ void ciTestErrors(nrs_t *nrs, dfloat time, int tstep, occa::memory &o_Uavg)
 	// https://www.lstm.tf.fau.de/database/simulation-database/
   const auto utauRef = 5.7901316173625254E-02;
   const auto utau = getUtau(nrs, o_Uavg);
+	const double ff = 8.0 * utau * utau;
   const auto utauErr = std::abs((utau - utauRef) / utauRef);
 
   if (platform->comm.mpiRank == 0) {
-    printf("tau: %g; relative error = %g\n", utau, utauErr);
+    printf("tau: %g; relative error = %g; ff = %g\n", utau, utauErr, ff);
   }
 
   (fabs(utauErr) < EPS) ? (CIPASS) : (CIFAIL);

@@ -1,11 +1,11 @@
 [GENERAL]
 #verbose = true
-polynomialOrder = 3
+polynomialOrder = 5
 startFrom = "pipe.fld"+time=0
 stopAt = endTime
-endTime = 100.0
+endTime = 1.0
 
-dt = 5e-3
+dt = targetCFL=4.0+initial=1e-3
 timeStepper = tombo2
 subCyclingSteps = 2
 
@@ -20,10 +20,10 @@ residualTol = 1e-04
 
 [VELOCITY]
 boundaryTypeMap = wall
-viscosity = -5300
+viscosity = -19000
 density = 1.0
 residualTol = 1e-06
 
 [CASEDATA]
-Re_tau = 181
+Re_tau = 550
 zLength = 6

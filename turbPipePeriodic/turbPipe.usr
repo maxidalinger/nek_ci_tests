@@ -1,8 +1,15 @@
+      include "limits.f"
+      include "utilities.f"
 c-----------------------------------------------------------------------
       subroutine userchk
 
       include 'SIZE'
       include 'TOTAL'
+
+      common /walld/ ywd(lx1,ly1,lz1,lelv)
+      real ywd
+
+      call y_p_limitsRS(ywd,.false.)
 
       return
       end
@@ -90,6 +97,19 @@ c-----------------------------------------------------------------------
 
       include 'SIZE'
       include 'TOTAL'
+
+      real w1,w2,w3,w4,w5
+      common /SCRNS/
+     & w1(lx1*ly1*lz1*lelv)
+     &,w2(lx1*ly1*lz1*lelv)
+     &,w3(lx1*ly1*lz1*lelv)
+     &,w4(lx1*ly1*lz1*lelv)
+     &,w5(lx1*ly1*lz1*lelv)
+
+      common /walld/ ywd(lx1,ly1,lz1,lelv)
+      real ywd
+
+      call distf(ywd,1,'W  ',w1,w2,w3,w4,w5)
 
       return
       end

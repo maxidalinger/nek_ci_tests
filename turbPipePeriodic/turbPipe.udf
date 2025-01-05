@@ -51,35 +51,31 @@ if (platform->options.compareArgs("CONSTANT FLOW RATE", "FALSE")) {
     udf.uEqnSource = &userf;
   }
 
-	std::vector<std::vector<occa::memory>> tavgFields;
+	if(ciMode) {
+		std::vector<std::vector<occa::memory>> tavgFields;
 
-	auto o_u    = nrs->o_U.slice(0 * nrs->fieldOffset, nrs->fieldOffset);
-	auto o_v    = nrs->o_U.slice(1 * nrs->fieldOffset, nrs->fieldOffset);
-	auto o_w    = nrs->o_U.slice(2 * nrs->fieldOffset, nrs->fieldOffset);
+		auto o_u    = nrs->o_U.slice(0 * nrs->fieldOffset, nrs->fieldOffset);
+		auto o_v    = nrs->o_U.slice(1 * nrs->fieldOffset, nrs->fieldOffset);
+		auto o_w    = nrs->o_U.slice(2 * nrs->fieldOffset, nrs->fieldOffset);
 
-	tavgFields.push_back({o_u});
-	tavgFields.push_back({o_v});
-	tavgFields.push_back({o_w});
+		tavgFields.push_back({o_u});
+		tavgFields.push_back({o_v});
+		tavgFields.push_back({o_w});
 
-	tavg::setup(nrs, tavgFields);
+		tavg::setup(nrs, tavgFields);
+	}
 
 }
 
 void UDF_ExecuteStep(nrs_t *nrs, dfloat time, int tstep)
 {
-	tavg::run(time);
+	if(ciMode) tavg::run(time);
 
   if (nrs->lastStep) {
     if (ciMode) {
 			auto o_Uavg = tavg::o_avg();
       ciTestErrors(nrs, time, tstep, o_Uavg);
-
-			tavg::outfld();
+			/* tavg::outfld(); */
     }
   }
-
-	if((tstep % 100) ==0){
-		nek::ocopyToNek(time, tstep);
-		nek::userchk();
-	}
 }

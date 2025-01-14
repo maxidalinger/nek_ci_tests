@@ -40,16 +40,16 @@ def plotnow(fname,xlabel,ylabel,x,y,labels,lstyles,mrks,ptype='line'):
     return
 
 def main():
-    V_L2 = np.array([2.1160E-03,2.0473E-05,5.0289E-06])
-    V_Linf = np.array([4.7896E-03,6.6190E-05,1.5999E-05])
+    V_L2 = np.array([2.0473E-05,5.0289E-06, 6.7627E-07])
+    V_Linf = np.array([6.6190E-05,1.5999E-05,2.0589E-06])
 
-    T_L2 = np.array([5.5042E-04,4.9927E-06,9.9020E-08])
-    T_Linf = np.array([1.3040E-03,1.6969E-05,3.0758E-07])
+    T_L2 = np.array([4.9927E-06,9.9020E-08,1.4077E-09])
+    T_Linf = np.array([1.6969E-05,3.0758E-07,5.0891E-09])
 
-    p_L2 = np.array([1.9256E-01,1.8239E-03,5.2077E-04])
-    p_Linf = np.array([8.0489E-01,1.2920E-02,3.1963E-03])
+    p_L2 = np.array([1.8239E-03,5.2077E-04,9.2001E-05])
+    p_Linf = np.array([1.2920E-02,3.1963E-03,5.4626E-04])
     
-    N = np.array([3,5,7])
+    N = np.array([5,7,9])
 
     lbs = ['L2','Linf']
     lstyles = ['-','-']

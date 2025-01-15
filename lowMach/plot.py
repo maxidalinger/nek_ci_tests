@@ -51,20 +51,18 @@ def main():
     
     N = np.array([5,7,9])
 
-    lbs = ['L2','Linf']
-    lstyles = ['-','-']
-    mrks = ['.','.']
+    lbs = ['$u$','$T$','$p_1$']
+    lstyles = ['-','-','-']
+    mrks = ['.','o','^']
     
-    x = [N,N]
+    x = [N,N,N]
     
-    y = [V_L2,V_Linf]
-    plotnow('verr','N','err',x,y,lbs,lstyles,mrks,ptype='semilogy')
+    y = [V_L2,T_L2,p_L2]
+    plotnow('L2','N','$\|e\|_{L2}$',x,y,lbs,lstyles,mrks,ptype='semilogy')
 
-    y = [T_L2,T_Linf]
-    plotnow('Terr','N','err',x,y,lbs,lstyles,mrks,ptype='semilogy')
+    y = [V_Linf,T_Linf,p_Linf]
+    plotnow('Linf','N','$\|e\|_{L\infty}$',x,y,lbs,lstyles,mrks,ptype='semilogy')
 
-    y = [p_L2,p_Linf]
-    plotnow('perr','N','err',x,y,lbs,lstyles,mrks,ptype='semilogy')
     return
 
 

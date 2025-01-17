@@ -49,7 +49,7 @@ c-----------------------------------------------------------------------
       COMMON /NRSSCPTR/ nrs_scptr(5)
       integer*8         nrs_scptr
 
-      real err(2)
+      real err(4)
       save err
 
       n = nx1*ny1*nz1*nelv
@@ -73,9 +73,13 @@ c-----------------------------------------------------------------------
 
       err(1) = glmax(diffx,n)
       err(2) = glmax(diffy,n)
+      err(3) = sqrt(glsc3(diffx,bm1,diffx,n)/VOLVM1)
+      err(4) = sqrt(glsc3(diffy,bm1,diffy,n)/VOLVM1)
 
       if (nio.eq.0)
      $   write(6,'(i6, 1p2e13.4,A)') istep, err(1),err(2),' Linf VX VY'
+      if (nio.eq.0)
+     $   write(6,'(i6, 1p2e13.4,A)') istep, err(3),err(4),' L2 VX VY'
 
       !if(ifoutfld) then
       !   call outpost2(diffx,diffy,diffz,mul,t,0,'dif')

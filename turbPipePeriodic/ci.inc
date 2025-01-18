@@ -6,7 +6,7 @@
 
 static int ciMode = 0;
 
-#define EPS 1e-1
+#define EPS 2e-2
 
 void ciSetup(MPI_Comm comm, setupAide &options)
 {
@@ -56,7 +56,7 @@ double getUtau(nrs_t *nrs, occa::memory &o_Uavg)
 
   auto o_Sij = platform->o_memPool.reserve<dfloat>(2 * nrs->NVfields * nrs->fieldOffset);
 
-	postProcessing::strainRate(nrs, true, o_Uavg, o_Sij);
+  postProcessing::strainRate(nrs, true, o_Uavg, o_Sij);
 
   const auto drag = postProcessing::viscousDrag(nrs, bidWall.size(), o_bidWall, o_Sij);
   o_Sij.free();
@@ -65,7 +65,7 @@ double getUtau(nrs_t *nrs, occa::memory &o_Uavg)
   platform->linAlg->fill(mesh->Nlocal, 1.0, o_tmp);
   const auto areaWall = mesh->surfaceIntegral(bidWall.size(), o_bidWall, o_tmp);
 
-	return sqrt(drag / areaWall.at(0));
+  return sqrt(drag / areaWall.at(0));
 }
 
 void ciTestErrors(nrs_t *nrs, dfloat time, int tstep, occa::memory &o_Uavg)
@@ -74,14 +74,13 @@ void ciTestErrors(nrs_t *nrs, dfloat time, int tstep, occa::memory &o_Uavg)
     return;
   }
 
-	// https://www.lstm.tf.fau.de/database/simulation-database/
+  // https://www.lstm.tf.fau.de/database/simulation-database/
   const auto utauRef = 5.7901316173625254E-02;
   const auto utau = getUtau(nrs, o_Uavg);
-	const double ff = 8.0 * utau * utau;
   const auto utauErr = std::abs((utau - utauRef) / utauRef);
 
   if (platform->comm.mpiRank == 0) {
-    printf("tau: %g; relative error = %g; ff = %g\n", utau, utauErr, ff);
+    printf("tau: %g; relative error = %g\n", utau, utauErr);
   }
 
   (fabs(utauErr) < EPS) ? (CIPASS) : (CIFAIL);

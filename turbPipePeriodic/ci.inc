@@ -24,6 +24,7 @@ void ciSetup(MPI_Comm comm, setupAide &options)
   options.setArgs("DT", std::string("1e-3"));
   options.setArgs("TARGET CFL", std::string("4"));
   options.setArgs("SUBCYCLING STEPS", std::string("2"));
+  options.setArgs("RESTART FILE NAME", std::string("pipe.fld+time=0"));
 
   options.setArgs("PRESSURE SOLVER", "PGMRES+FLEXIBLE");
   options.setArgs("PRESSURE SOLVER TOLERANCE", std::string("1e-4"));

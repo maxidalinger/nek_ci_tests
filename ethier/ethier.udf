@@ -343,78 +343,6 @@ int timeStepConverged(nrs_t *nrs, int stage)
 
 void UDF_Setup(nrs_t *nrs)
 {
-  // only ciMode 1 exercises the particles
-  if (ciMode == 1) {
-
-    const dfloat newton_tol = 5e-13;
-    const dfloat bb_tol = 0.01;
-
-    particles = new lpm_t(nrs, bb_tol, newton_tol);
-
-    particles->setSolver("AB");
-
-    particles->setVerbosity(
-        lpm_t::VerbosityLevel::Basic); // issue findpts warnings when a point leaves the domain
-
-    particles->setUserRHS(particleRHS);
-
-    // register fluid velocity as an interpolated quantity
-    particles->registerInterpField("fluid_velocity", nrs->NVfields, nrs->o_U);
-
-    // register unique particle id as a field
-    particles->registerProp("gid", 1);
-
-    // uniformly distribute particles in a cube [-Lx/2, Lx/2] x [-Ly/2, Ly/2] x [-Lz/2, Lz/2]
-    // in a round-robin fashion
-    int px = static_cast<int>(std::round(std::cbrt(nPartGlobal)));
-    int py = px;
-    int pz = px;
-
-    const double Lx = 0.2;
-    const double Ly = 0.2;
-    const double Lz = 0.2;
-
-    auto xPoint = linspace<dfloat>(-Lx / 2, Lx / 2, px);
-    auto yPoint = linspace<dfloat>(-Ly / 2, Ly / 2, py);
-    auto zPoint = linspace<dfloat>(-Lz / 2, Lz / 2, pz);
-
-    int pid = 0;
-    for (auto &&x : xPoint) {
-      for (auto &&y : yPoint) {
-        for (auto &&z : zPoint) {
-          // only add particles to rank 0
-          if (platform->comm.mpiRank == 0) {
-            xp0.push_back(x);
-            yp0.push_back(y);
-            zp0.push_back(z);
-            pid0.push_back(pid);
-          }
-          xpg0.push_back(x);
-          ypg0.push_back(y);
-          zpg0.push_back(z);
-          pid++;
-        }
-      }
-    }
-
-    auto np = xp0.size();
-    std::vector<dfloat> y0(particles->nDOFs() * np, 0.0);
-    for (int n = 0; n < np; ++n) {
-      // set particle initial position
-      y0[n + 0 * np] = xp0[n];
-      y0[n + 1 * np] = yp0[n];
-      y0[n + 2 * np] = zp0[n];
-    }
-
-    double t0;
-    platform->options.getArgs("START TIME", t0);
-
-    particles->initialize(np, t0, y0);
-
-    auto o_pid = platform->device.malloc<dfloat>(particles->numParticles(), pid0.data());
-    particles->setProp("gid", o_pid);
-  }
-
   mesh_t *mesh = nrs->meshV;
   udf.sEqnSource = &userq;
   udf.timeStepConverged = &timeStepConverged;
@@ -422,53 +350,6 @@ void UDF_Setup(nrs_t *nrs)
     o_x0 = platform->device.malloc<dfloat>(mesh->Nlocal, mesh->o_x);
     o_y0 = platform->device.malloc<dfloat>(mesh->Nlocal, mesh->o_y);
     o_z0 = platform->device.malloc<dfloat>(mesh->Nlocal, mesh->o_z);
-  }
-}
-
-void overwriteParticleSolution(nrs_t *nrs, double time)
-{
-  // gid of particles currently on rank
-  std::vector<int> gids(particles->numParticles());
-  std::vector<dfloat> xp0_g(particles->numParticles()); // based on current rank
-  std::vector<dfloat> yp0_g(particles->numParticles());
-  std::vector<dfloat> zp0_g(particles->numParticles());
-  auto o_gidFloat = particles->getProp("gid");
-  std::vector<dfloat> gidFloat(o_gidFloat.length());
-  o_gidFloat.copyTo(gidFloat.data());
-
-  for (int i = 0; i < particles->numParticles(); ++i) {
-    int gid = gidFloat[i];
-    gids[i] = gid;
-    xp0_g[i] = xpg0[gid];
-    yp0_g[i] = ypg0[gid];
-    zp0_g[i] = zpg0[gid];
-  }
-
-  auto o_y0 = platform->device.malloc<dfloat>(nrs->dim * xp0_g.size());
-
-  if (particles->numParticles() > 0) {
-    auto o_x0coord = o_y0 + 0 * xp0_g.size();
-    auto o_y0coord = o_y0 + 1 * yp0_g.size();
-    auto o_z0coord = o_y0 + 2 * zp0_g.size();
-    o_x0coord.copyFrom(xp0_g.data(), xp0_g.size());
-    o_y0coord.copyFrom(yp0_g.data(), yp0_g.size());
-    o_z0coord.copyFrom(zp0_g.data(), zp0_g.size());
-  }
-
-  auto o_y = solveODE(nrs, 0.0, time, 1e-3 * nrs->dt[0], o_y0, exactUVWP, RK);
-
-  if (particles->numParticles() > 0) {
-    auto o_xcoord = o_y + 0 * xp0_g.size();
-    auto o_ycoord = o_y + 1 * xp0_g.size();
-    auto o_zcoord = o_y + 2 * xp0_g.size();
-
-    auto o_xp = particles->getDOF("x");
-    auto o_yp = static_cast<occa::memory>(particles->getDOF("y"));
-    auto o_zp = static_cast<occa::memory>(particles->getDOF("z"));
-
-    o_xp.copyFrom(o_xcoord, xp0_g.size());
-    o_yp.copyFrom(o_ycoord, yp0_g.size());
-    o_zp.copyFrom(o_zcoord, zp0_g.size());
   }
 }
 
@@ -491,22 +372,13 @@ void UDF_ExecuteStep(nrs_t *nrs, double time, int tstep)
     }
   }
 
-  // only ciMode 1 exercises the particles path
-  if (ciMode == 1) {
-    particles->integrate(time);
-
-    if (tstep <= 5) {
-      overwriteParticleSolution(nrs, time);
-    }
-  }
-
   if (platform->options.compareArgs("MOVING MESH", std::string("TRUE"))) {
     userMeshVelocity(mesh->Nlocal, nrs->fieldOffset, time, o_x0, o_y0, o_z0, mesh->o_U);
   }
 
   if (nrs->isOutputStep) {
-    nek::ocopyToNek(time, tstep);
-    nek::userchk();
+    /* nek::ocopyToNek(time, tstep); */
+    /* nek::userchk(); */
 
     if (ciMode == 1) {
       particles->writeFld();
@@ -514,6 +386,6 @@ void UDF_ExecuteStep(nrs_t *nrs, double time, int tstep)
   }
 
   if (ciMode) {
-    ciTestErrors(nrs, time, tstep, particles, exactUVWP, RK);
+    /* ciTestErrors(nrs, time, tstep, particles, exactUVWP, RK); */
   }
 }

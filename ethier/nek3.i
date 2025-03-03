@@ -21,6 +21,7 @@
   show = 'pass'
   execute_on = final
   console = false
+  file_base = 'nek_out.csv'
 []
 
 P_U0 = 0.5

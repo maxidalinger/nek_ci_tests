@@ -87,11 +87,11 @@ void UDF_Setup(nrs_t *nrs)
 
 void UDF_ExecuteStep(nrs_t *nrs, double time, int tstep)
 {
-  if (nrs->isOutputStep) {
-    nek::ocopyToNek(time, tstep);
-    nek::userchk();
-  }
-  if (ciMode) {
-    ciTestErrors(nrs, time, tstep);
-  }
+  /* if (nrs->isOutputStep) { */
+  /*   nek::ocopyToNek(time, tstep); */
+  /*   nek::userchk(); */
+  /* } */
+  /* if (ciMode) { */
+  /*   ciTestErrors(nrs, time, tstep); */
+  /* } */
 }

@@ -1,0 +1,24 @@
+[Tests]
+  [channel_cimode1]
+    type = CSVDiff
+    input = nek1.i
+    csvdiff = nek_out.csv
+    cli_args = '--nekrs-cimode 1'
+
+    max_parallel = 20
+
+    requirement = 'The system shall compute the error norms of velocity and compare against exact solution of Stokes flow.'
+    required_objects = 'NekRSProblem'
+  []
+  [channel_cimode2]
+    type = CSVDiff
+    input = nek2.i
+    csvdiff = nek_out.csv
+    cli_args = '--nekrs-cimode 2'
+
+    max_parallel = 20
+
+    requirement = 'The system shall compute the error norms of velocity and compare against exact solution of Stokes flow.'
+    required_objects = 'NekRSProblem'
+  []
+[]

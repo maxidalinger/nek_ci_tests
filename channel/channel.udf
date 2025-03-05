@@ -41,6 +41,9 @@ void UDF_Setup0(MPI_Comm comm, setupAide &options)
     ciSetup(comm, options);
   }
   platform->par->extract("casedata", "p_rot", P_ROT);
+
+  if(ciMode == 2) P_ROT = atan(1.0); //prevents precision loss
+
   if (platform->options.compareArgs("BUILD ONLY", "FALSE")) {
     double *const nek_cb_scnrs = (double *)nek::ptr("cb_scnrs");
     nek_cb_scnrs[0] = P_ROT;
@@ -71,11 +74,11 @@ void UDF_Setup(nrs_t *nrs)
 
 void UDF_ExecuteStep(nrs_t *nrs, double time, int tstep)
 {
-  if (nrs->isOutputStep) {
-    nek::ocopyToNek(time, tstep);
-    nek::userchk();
-  }
-  if (ciMode) {
-    ciTestErrors(nrs, time, tstep);
-  }
+  /* if (nrs->isOutputStep) { */
+  /*   nek::ocopyToNek(time, tstep); */
+  /*   nek::userchk(); */
+  /* } */
+  /* if (ciMode) { */
+  /*   ciTestErrors(nrs, time, tstep); */
+  /* } */
 }

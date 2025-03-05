@@ -61,20 +61,16 @@ c-----------------------------------------------------------------------
       nrs_scptr(5) = loc(err(1))
 
       do i=1,n
-        vxr = vx(i,1,1,1) * cos(P_ROT) + vy(i,1,1,1) * sin(P_ROT)
-        vyr =-vx(i,1,1,1) * sin(P_ROT) + vy(i,1,1,1) * cos(P_ROT)
-        diffx(i,1,1,1) = abs(vxr        -uxex(i,1,1,1))
-        if (uxex(i,1,1,1).gt.1e-14) diffx(i,1,1,1) =
-     $    diffx(i,1,1,1)/uxex(i,1,1,1)
-        diffy(i,1,1,1) = abs(vyr        -uyex(i,1,1,1))
-        if (uyex(i,1,1,1).gt.1e-14) diffy(i,1,1,1) =
-     $    diffy(i,1,1,1)/uyex(i,1,1,1)
+        vxr = uxex(i,1,1,1) * cos(P_ROT) - uyex(i,1,1,1) * sin(P_ROT)
+        vyr = uxex(i,1,1,1) * sin(P_ROT) + uyex(i,1,1,1) * cos(P_ROT)
+        diffx(i,1,1,1) = abs(vxr - vx(i,1,1,1))
+        diffy(i,1,1,1) = abs(vyr - vy(i,1,1,1))
       enddo
 
       err(1) = glmax(diffx,n)
       err(2) = glmax(diffy,n)
-      err(3) = sqrt(glsc3(diffx,bm1,diffx,n)/VOLVM1)
-      err(4) = sqrt(glsc3(diffy,bm1,diffy,n)/VOLVM1)
+      err(3) = sqrt(glsc3(diffx,bm1,diffx,n))
+      err(4) = sqrt(glsc3(diffy,bm1,diffy,n))
 
       if (nio.eq.0)
      $   write(6,'(i6, 1p2e13.4,A)') istep, err(1),err(2),' Linf VX VY'

@@ -8,6 +8,8 @@
     # mesh only contains 60 elements
     max_parallel = 20
 
+    max_time = 1000 
+
     requirement = 'The system shall reproduce the wall stress for turbulent pipe flow.'
     required_objects = 'NekRSProblem'
   []

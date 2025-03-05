@@ -18,3 +18,11 @@ Contents
    channel
    turbPipePeriodic
    references
+
+Pending Cases
+-------------
+- Backward Facing Step
+- Conjugate Heat Transfer
+- Rayleigh Benard Convection
+- Kovasznay flow
+- Moving Cylinder

@@ -1,9 +1,9 @@
 [GENERAL]
-polynomialOrder = 7
-#startFrom = "r.fld"+time=0
+polynomialOrder = 5
+#startFrom = "restart.fld"+time=0
 stopAt = endTime
 endTime = 50
-dt = 5e-02
+dt = 1e-02
 timeStepper = tombo2
 
 writeControl = simulationTime 

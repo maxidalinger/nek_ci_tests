@@ -10,19 +10,19 @@ static int ciMode = 0;
 
 void ciSetup(MPI_Comm comm, setupAide &options)
 {
-  options.setArgs("POLYNOMIAL DEGREE", std::string("7")); //
-  options.setArgs("CUBATURE POLYNOMIAL DEGREE", std::string("10"));
-  options.setArgs("CONSTANT FLOW RATE", "TRUE"); //
-  options.setArgs("CONSTANT FLOW DIRECTION", "X"); //
-  options.setArgs("RESTART FILE NAME", std::string("r.fld+time=0")); //
-  options.setArgs("SOLUTION OUTPUT INTERVAL", "100");
-  options.setArgs("VISCOSITY", std::to_string(1.0 / 43500.0)); //
-  options.setArgs("DENSITY", std::string("1.0")); //
+  options.setArgs("POLYNOMIAL DEGREE", std::string("5"));
+  //options.setArgs("CUBATURE POLYNOMIAL DEGREE", std::string("10"));
+  options.setArgs("CONSTANT FLOW RATE", "TRUE");
+  options.setArgs("CONSTANT FLOW DIRECTION", "X");
+  options.setArgs("RESTART FILE NAME", std::string("restart.fld+time=0")); // Obtained with N=5 for tf=500, dt=1e-2
+  options.setArgs("SOLUTION OUTPUT INTERVAL", std::string("1000"));
+  options.setArgs("VISCOSITY", std::to_string(1.0 / 43500.0));
+  options.setArgs("DENSITY", std::string("1.0"));
   options.setArgs("NUMBER TIMESTEPS", std::string("-1"));
-  options.setArgs("END TIME", std::string("10")); //
-  options.setArgs("TIME INTEGRATOR", "TOMBO2"); //
+  options.setArgs("END TIME", std::string("10.0"));
+  options.setArgs("TIME INTEGRATOR", "TOMBO2");
   options.setArgs("ADVECTION TYPE", "CONVECTIVE+CUBATURE");
-  options.setArgs("DT", std::string("5e-2")); //
+  options.setArgs("DT", std::string("1e-2"));
   options.setArgs("SUBCYCLING STEPS", std::string("0"));
 
   options.setArgs("PRESSURE KRYLOV SOLVER", "PGMRES+FLEXIBLE");

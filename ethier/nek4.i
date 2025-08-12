@@ -21,7 +21,7 @@
   show = 'pass'
   execute_on = final
   console = false
-  file_base = 'nek_out'
+  file_base = 'nek4_out'
   #[console]
   #  type = Console
   #  time_step_interval = 100
@@ -37,14 +37,14 @@ a = ${fparse pi * P_A0}
 nu = ${fparse 1/100}
 d = ${fparse pi * P_D0}
 
-TOL_V  = 4.78E-08
-TOL_P  = 1.08E-07
-TOL_T  = 9.48E-10
-TOL_S  = 1.07E-09
+TOL_V  = 5.90E-08
+TOL_P  = 9.91E-08
+TOL_T  = 2.09E-09
+TOL_S  = 2.63E-09
 TOL    = 1.00E-11
 
-ITER_V = 10
-ITER_P = 2
+ITER_V = 1
+ITER_P = 1
 ITER_T = 2
 ITER_S = 2
 ITER_delta = 2

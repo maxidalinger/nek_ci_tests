@@ -5,7 +5,7 @@
 
 [Problem]
   type = NekRSStandaloneProblem
-  casename = 'ethier'
+  casename = 'mv_ethier'
 []
 
 [Executioner]
@@ -21,7 +21,7 @@
   show = 'pass'
   execute_on = final
   console = false
-  file_base = 'nek_out'
+  file_base = 'nek5_out'
   #[console]
   #  type = Console
   #  time_step_interval = 100
@@ -37,16 +37,16 @@ a = ${fparse pi * P_A0}
 nu = ${fparse 1/100}
 d = ${fparse pi * P_D0}
 
-TOL_V  = 4.78E-08
-TOL_P  = 1.08E-07
-TOL_T  = 9.48E-10
-TOL_S  = 1.07E-09
+TOL_V  = 2.21E-05
+TOL_P  = 5.89E-05
+TOL_T  = 1.04E-05
+TOL_S  = 1.32E-05
 TOL    = 1.00E-11
 
-ITER_V = 10
-ITER_P = 2
-ITER_T = 2
-ITER_S = 2
+ITER_V = 12
+ITER_P = 11
+ITER_T =  5
+ITER_S =  5
 ITER_delta = 2
 
 [Functions]

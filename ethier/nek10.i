@@ -37,14 +37,14 @@ a = ${fparse pi * P_A0}
 nu = ${fparse 1/100}
 d = ${fparse pi * P_D0}
 
-TOL_V  = 4.78E-08
+TOL_V  = 4.79E-08
 TOL_P  = 1.08E-07
-TOL_T  = 9.48E-10
-TOL_S  = 1.07E-09
+TOL_T  = 8.77E-10
+TOL_S  = 1.02E-09
 TOL    = 1.00E-11
 
 ITER_V = 10
-ITER_P = 2
+ITER_P = 1
 ITER_T = 2
 ITER_S = 2
 ITER_delta = 2

@@ -7,7 +7,7 @@
 
     max_parallel = 20
 
-    requirement = 'The system shall compute the error norms of velocity temperature and scalar fields with respect to exact solution from Ethier.'
+    requirement = 'The system shall compute the error norms of velocity, temperature, and scalar fields with respect to exact solution from Ethier, and the number of iterations.'
     required_objects = 'NekRSProblem'
   []
   [ethier_cimode3]
@@ -18,7 +18,161 @@
 
     max_parallel = 20
 
-    requirement = 'The system shall compute the error norms of velocity temperature and scalar fields with respect to exact solution from Ethier.'
+    requirement = 'The system shall compute the error norms of velocity, temperature, and scalar fields with respect to exact solution from Ethier, and the number of iterations.'
     required_objects = 'NekRSProblem'
   []
+  [ethier_cimode4]
+    type = CSVDiff
+    input = nek4.i
+    csvdiff = nek4_out.csv
+    cli_args = '--nekrs-cimode 4'
+
+    max_parallel = 20
+
+    requirement = 'The system shall compute the error norms of velocity, temperature, and scalar fields with respect to exact solution from Ethier, and the number of iterations.'
+    required_objects = 'NekRSProblem'
+  []
+  [ethier_cimode5]
+    type = CSVDiff
+    input = nek5.i
+    csvdiff = nek5_out.csv
+    cli_args = '--nekrs-cimode 5'
+
+    max_parallel = 20
+
+    requirement = 'The system shall compute the error norms of velocity, temperature, and scalar fields with respect to exact solution from Ethier, and the number of iterations.'
+    required_objects = 'NekRSProblem'
+  []
+  [ethier_cimode6]
+    type = CSVDiff
+    input = nek6.i
+    csvdiff = nek6_out.csv
+    cli_args = '--nekrs-cimode 6'
+
+    max_parallel = 20
+
+    requirement = 'The system shall compute the error norms of velocity, temperature, and scalar fields with respect to exact solution from Ethier, and the number of iterations.'
+    required_objects = 'NekRSProblem'
+  []
+  [ethier_cimode7]
+    type = CSVDiff
+    input = nek7.i
+    csvdiff = nek7_out.csv
+    cli_args = '--nekrs-cimode 7'
+
+    max_parallel = 20
+
+    requirement = 'The system shall compute the error norms of velocity, temperature, and scalar fields with respect to exact solution from Ethier, and the number of iterations.'
+    required_objects = 'NekRSProblem'
+  []
+  [ethier_cimode8]
+    type = CSVDiff
+    input = nek8.i
+    csvdiff = nek8_out.csv
+    cli_args = '--nekrs-cimode 8'
+
+    max_parallel = 20
+
+    requirement = 'The system shall compute the error norms of velocity, temperature, and scalar fields with respect to exact solution from Ethier, the number of iterations, and CFL.'
+    required_objects = 'NekRSProblem'
+  []
+  [ethier_cimode9]
+    type = CSVDiff
+    input = nek9.i
+    csvdiff = nek_out.csv
+    cli_args = '--nekrs-cimode 9'
+
+    max_parallel = 20
+
+    requirement = 'The system shall compute the error norms of velocity, temperature, and scalar fields with respect to exact solution from Ethier, and the number of iterations.'
+    required_objects = 'NekRSProblem'
+  []
+  [ethier_cimode10]
+    type = CSVDiff
+    input = nek10.i
+    csvdiff = nek_out.csv
+    cli_args = '--nekrs-cimode 10'
+
+    max_parallel = 20
+
+    requirement = 'The system shall compute the error norms of velocity, temperature, and scalar fields with respect to exact solution from Ethier, and the number of iterations.'
+    required_objects = 'NekRSProblem'
+  []
+  [ethier_cimode11]
+    type = CSVDiff
+    input = nek11.i
+    csvdiff = nek_out.csv
+    cli_args = '--nekrs-cimode 11'
+
+    max_parallel = 20
+
+    requirement = 'The system shall compute the error norms of velocity, temperature, and scalar fields with respect to exact solution from Ethier, and the number of iterations.'
+    required_objects = 'NekRSProblem'
+  []
+  [ethier_cimode12]
+    type = CSVDiff
+    input = nek12.i
+    csvdiff = nek_out.csv
+    cli_args = '--nekrs-cimode 12'
+
+    max_parallel = 20
+
+    requirement = 'The system shall compute the error norms of velocity and scalar field with respect to exact solution from Ethier, and solvers status.'
+    required_objects = 'NekRSProblem'
+  []
+  #[ethier_cimode13]
+  #  type = CSVDiff
+  #  input = nek13.i
+  #  csvdiff = nek_out.csv
+  #  cli_args = '--nekrs-cimode 13'
+  #
+  #  max_parallel = 20
+  #
+  #  requirement = 'The system shall compute the error norms of the scalar field with respect to exact solution from Ethier, and solvers status.'
+  #  required_objects = 'NekRSProblem'
+  #[]
+  [ethier_cimode14]
+    type = CSVDiff
+    input = nek14.i
+    csvdiff = nek_out.csv
+    cli_args = '--nekrs-cimode 14'
+
+    max_parallel = 20
+
+    requirement = 'The system shall compute the error norms of velocity, temperature, and scalar fields with respect to exact solution from Ethier, and the number of iterations.'
+    required_objects = 'NekRSProblem'
+  []
+  #[ethier_cimode16]
+  #  type = CSVDiff
+  #  input = nek16.i
+  #  csvdiff = nek_out.csv
+  #  cli_args = '--nekrs-cimode 16'
+  #
+  #  max_parallel = 20
+  #
+  #  requirement = 'The system shall compute the error norms of velocity, temperature, and scalar fields with respect to exact solution from Ethier.'
+  #  required_objects = 'NekRSProblem'
+  #[]
+  #[ethier_cimode17]
+  #  type = CSVDiff
+  #  input = nek17.i
+  #  csvdiff = nek_out.csv
+  #  cli_args = '--nekrs-cimode 17'
+  #
+  #  max_parallel = 20
+  #
+  #  requirement = 'The system shall compute the error norms of velocity, temperature, and scalar fields with respect to exact solution from Ethier.'
+  #  required_objects = 'NekRSProblem'
+  #[]
+  #[ethier_cimode18]
+  #  type = CSVDiff
+  #  input = nek18.i
+  #  csvdiff = nek_out.csv
+  #  cli_args = '--nekrs-cimode 18'
+  #
+  #  max_parallel = 20
+  #
+  #  requirement = 'The system shall compute the error norms of velocity, temperature, and scalar fields with respect to exact solution from Ethier.'
+  #  required_objects = 'NekRSProblem'
+  #[]
 []

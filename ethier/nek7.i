@@ -21,7 +21,7 @@
   show = 'pass'
   execute_on = final
   console = false
-  file_base = 'nek_out'
+  file_base = 'nek7_out'
   #[console]
   #  type = Console
   #  time_step_interval = 100
@@ -37,14 +37,14 @@ a = ${fparse pi * P_A0}
 nu = ${fparse 1/100}
 d = ${fparse pi * P_D0}
 
-TOL_V  = 4.78E-08
-TOL_P  = 1.08E-07
-TOL_T  = 9.48E-10
-TOL_S  = 1.07E-09
+TOL_V  = 2.51E-08
+TOL_P  = 1.93E-06
+TOL_T  = 2.90E-11
+TOL_S  = 3.08E-11
 TOL    = 1.00E-11
 
-ITER_V = 10
-ITER_P = 2
+ITER_V = 5
+ITER_P = 999 # Just check for convergence
 ITER_T = 2
 ITER_S = 2
 ITER_delta = 2
@@ -249,12 +249,6 @@ ITER_delta = 2
     pp_names = 'v_iterations'
     execute_on = final
   []
-  [iter_p_diff]
-    type = ParsedPostprocessor
-    expression = 'abs(p_iterations - ${ITER_P})'
-    pp_names = 'p_iterations'
-    execute_on = final
-  []
   [iter_t_diff]
     type = ParsedPostprocessor
     expression = 'abs(t_iterations - ${ITER_T})'
@@ -276,11 +270,11 @@ ITER_delta = 2
                      ( terrl2 < ${TOL_T} |  terrl2 < ${TOL}) &
                      ( serrl2 < ${TOL_S} |  serrl2 < ${TOL}) &
                   iter_v_diff <= ${ITER_delta} &
-                  iter_p_diff <= ${ITER_delta} &
+                 p_iterations <  ${ITER_P}     &
                   iter_t_diff <= ${ITER_delta} &
                   iter_s_diff <= ${ITER_delta}, 1, 0)'
     pp_names = 'uxerrl2 perrl2 terrl2 serrl2
-                iter_v_diff iter_p_diff iter_t_diff iter_s_diff'
+                iter_v_diff p_iterations iter_t_diff iter_s_diff'
     execute_on = final
   []
 []

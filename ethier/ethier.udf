@@ -385,7 +385,7 @@ void UDF_ExecuteStep(nrs_t *nrs, double time, int tstep)
     }
   }
 
-  if (ciMode) {
-    /* ciTestErrors(nrs, time, tstep, particles, exactUVWP, RK); */
-  }
+  /* if (ciMode) { */
+  /*   ciTestErrors(nrs, time, tstep, particles, exactUVWP, RK); */
+  /* } */
 }

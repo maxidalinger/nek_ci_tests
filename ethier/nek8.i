@@ -21,7 +21,7 @@
   show = 'pass'
   execute_on = final
   console = false
-  file_base = 'nek_out'
+  file_base = 'nek8_out'
   #[console]
   #  type = Console
   #  time_step_interval = 100
@@ -37,17 +37,19 @@ a = ${fparse pi * P_A0}
 nu = ${fparse 1/100}
 d = ${fparse pi * P_D0}
 
-TOL_V  = 4.78E-08
-TOL_P  = 1.08E-07
-TOL_T  = 9.48E-10
-TOL_S  = 1.07E-09
+TOL_V  = 8.68E-06
+TOL_P  = 9.93E-03
+TOL_T  = 7.29E-06
+TOL_S  = 7.96E-06
 TOL    = 1.00E-11
 
-ITER_V = 10
-ITER_P = 2
-ITER_T = 2
-ITER_S = 2
+ITER_V = 11
+ITER_P = 6
+ITER_T = 4
+ITER_S = 3
 ITER_delta = 2
+P_CFL = 0.5
+P_TSTEPS = 59 # 56 + 3
 
 [Functions]
   [unitFunction]
@@ -268,6 +270,18 @@ ITER_delta = 2
     execute_on = final
   []
   
+  # Other postprocessors
+  [cfl]
+    type = NekInfoPostprocessor
+    test_type = 'cfl'
+    execute_on = final
+  []
+  [time_steps]
+    type = NekInfoPostprocessor
+    test_type = 'tstep'
+    execute_on = final
+  []
+  
   # Check if all tests passed
   [pass]
     type = ParsedPostprocessor
@@ -278,9 +292,12 @@ ITER_delta = 2
                   iter_v_diff <= ${ITER_delta} &
                   iter_p_diff <= ${ITER_delta} &
                   iter_t_diff <= ${ITER_delta} &
-                  iter_s_diff <= ${ITER_delta}, 1, 0)'
+                  iter_s_diff <= ${ITER_delta} &
+                          cfl <= ${P_CFL}      &
+                   time_steps <  ${P_TSTEPS}, 1, 0)'
     pp_names = 'uxerrl2 perrl2 terrl2 serrl2
-                iter_v_diff iter_p_diff iter_t_diff iter_s_diff'
+                iter_v_diff iter_p_diff iter_t_diff iter_s_diff
+                cfl time_steps'
     execute_on = final
   []
 []

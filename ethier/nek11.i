@@ -44,7 +44,7 @@ TOL_S  = 1.07E-09
 TOL    = 1.00E-11
 
 ITER_V = 10
-ITER_P = 2
+ITER_P = 3
 ITER_T = 2
 ITER_S = 2
 ITER_delta = 2

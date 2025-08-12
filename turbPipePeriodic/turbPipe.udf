@@ -46,25 +46,24 @@ void UDF_Setup0(MPI_Comm comm, setupAide &options)
 
 void UDF_Setup(nrs_t *nrs)
 {
-if (platform->options.compareArgs("CONSTANT FLOW RATE", "FALSE")) {
+  if (platform->options.compareArgs("CONSTANT FLOW RATE", "FALSE")) {
     // assign function pointer to drive flow by constant mean pressure gradient
-  udf.uEqnSource = &userf;
- }
-
- if(ciMode) {
-   std::vector<std::vector<occa::memory>> tavgFields;
-   
-   auto o_u    = nrs->o_U.slice(0 * nrs->fieldOffset, nrs->fieldOffset);
-   auto o_v    = nrs->o_U.slice(1 * nrs->fieldOffset, nrs->fieldOffset);
-   auto o_w    = nrs->o_U.slice(2 * nrs->fieldOffset, nrs->fieldOffset);
-   
-   tavgFields.push_back({o_u});
-   tavgFields.push_back({o_v});
-   tavgFields.push_back({o_w});
-   
-   tavg::setup(nrs, tavgFields);
- }
- 
+    udf.uEqnSource = &userf;
+  }
+  
+  if(ciMode) {
+    std::vector<std::vector<occa::memory>> tavgFields;
+    
+    auto o_u    = nrs->o_U.slice(0 * nrs->fieldOffset, nrs->fieldOffset);
+    auto o_v    = nrs->o_U.slice(1 * nrs->fieldOffset, nrs->fieldOffset);
+    auto o_w    = nrs->o_U.slice(2 * nrs->fieldOffset, nrs->fieldOffset);
+    
+    tavgFields.push_back({o_u});
+    tavgFields.push_back({o_v});
+    tavgFields.push_back({o_w});
+    
+    tavg::setup(nrs, tavgFields);
+  }
 }
 
 void UDF_ExecuteStep(nrs_t *nrs, dfloat time, int tstep)

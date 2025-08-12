@@ -18,14 +18,24 @@
 
 [Outputs]
   csv = true
-  execute_on = final
   show = 'pass'
+  execute_on = final
   console = false
   file_base = 'nek_out'
+  #[console]
+  #  type = Console
+  #  time_step_interval = 100
+  #[]
+  #[csv]
+  #  type = CSV
+  #  time_step_interval = 1
+  #[]
 []
 
-P_utauRef = 5.7901316173625254E-02 #https://www.lstm.tf.fau.de/database/simulation-database/
-P_EPS = 2e-2
+# Reference value from:
+# https://www.lstm.tf.fau.de/database/simulation-database/
+P_utauRef = 5.7901316173625254E-02
+P_EPS = 1.00E-01
 
 [Postprocessors]
   [drag]
@@ -43,14 +53,14 @@ P_EPS = 2e-2
     expression = 'sqrt(drag/area)'
     pp_names = 'drag area'
   []
-  [rel_err]
+  [err]
     type = ParsedPostprocessor
-    expression = 'abs(utau - ${P_utauRef}) / ${P_utauRef}'
+    expression = 'abs(utau - ${P_utauRef})'
     pp_names = 'utau'
   []
   [pass]
     type = ParsedPostprocessor
-    expression = 'if (rel_err < ${P_EPS}, 1, 0)'
-    pp_names = 'rel_err'
+    expression = 'if (err < ${P_EPS}, 1, 0)'
+    pp_names = 'err'
   []
 []

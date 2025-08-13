@@ -1,0 +1,68 @@
+[Tests]
+  [mv_cyl_cimode1]
+    type = CSVDiff
+    input = nek1.i
+    csvdiff = nek_out.csv
+    cli_args = '--nekrs-cimode 1'
+
+    max_parallel = 20
+
+    requirement = 'The system shall compute the error norms of average temperature, volume, thermodynamic pressure and its derivative with respect to exact solution.'
+    required_objects = 'NekRSProblem'
+  []
+  [mv_cyl_cimode2]
+    type = CSVDiff
+    input = nek2.i
+    csvdiff = nek_out.csv
+    cli_args = '--nekrs-cimode 2'
+  
+    max_parallel = 20
+  
+    requirement = 'The system shall compute the error norms of average temperature, volume, thermodynamic pressure and its derivative with respect to exact solution.'
+    required_objects = 'NekRSProblem'
+  []
+  [mv_cyl_cimode3]
+    type = CSVDiff
+    input = nek3.i
+    csvdiff = nek_out.csv
+    cli_args = '--nekrs-cimode 3'
+  
+    max_parallel = 20
+  
+    requirement = 'The system shall compute the error norms of average temperature, volume, thermodynamic pressure and its derivative with respect to exact solution.'
+    required_objects = 'NekRSProblem'
+  []
+  [mv_cyl_cimode5]
+    type = CSVDiff
+    input = nek5.i
+    csvdiff = nek_out.csv
+    cli_args = '--nekrs-cimode 5'
+  
+    max_parallel = 20
+  
+    requirement = 'The system shall compute the error norms of average temperature, volume, thermodynamic pressure and its derivative with respect to exact solution.'
+    required_objects = 'NekRSProblem'
+  []
+  [mv_cyl_cimode6]
+    type = CSVDiff
+    input = nek6.i
+    csvdiff = nek_out.csv
+    cli_args = '--nekrs-cimode 6'
+  
+    max_parallel = 20
+  
+    requirement = 'The system shall compute the error norms of average temperature, volume, thermodynamic pressure and its derivative with respect to exact solution.'
+    required_objects = 'NekRSProblem'
+  []
+  #[mv_cyl_cimode7]
+  #  type = CSVDiff
+  #  input = nek7.i
+  #  csvdiff = nek_out.csv
+  #  cli_args = '--nekrs-cimode 7'
+  #
+  #  max_parallel = 20
+  #
+  #  requirement = 'The system shall compute the error norms of average temperature, volume, thermodynamic pressure and its derivative with respect to exact solution.'
+  #  required_objects = 'NekRSProblem'
+  #[]
+[]

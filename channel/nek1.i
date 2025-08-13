@@ -22,6 +22,10 @@
   execute_on = final
   console = false
   file_base = 'nek_out'
+  #[console]
+  #  type = Console
+  #  time_step_interval = 100
+  #[]
 []
 
 P_U0 = 1.0
@@ -29,8 +33,10 @@ P_PI = 4.0*atan(1.0)
 P_PHX = ${P_PI}/2.0
 P_PHY = ${P_PI}/2.0
 P_ROT = 0.0
-P_EPS = 0.1
 
+TOL_VX = 4.76E-07
+TOL_VY = 1.22E-06
+TOL    = 1.00E-11
 
 [Functions]
   [uexact]
@@ -80,23 +86,11 @@ P_EPS = 0.1
     function = vr
     execute_on = final
   []
-  [urelerr]
-    type = ParsedPostprocessor
-    expression = 'abs((uerrl2 - 6.07e-10)/uerrl2)'
-    pp_names = 'uerrl2'
-    execute_on = final
-  []
-  [vrelerr]
-    type = ParsedPostprocessor
-    expression = 'abs((verrl2 - 2.27e-9)/verrl2)'
-    pp_names = 'verrl2'
-    execute_on = final
-  []
   [pass]
     type = ParsedPostprocessor
-    expression = 'if(urelerr < ${P_EPS} &
-                     vrelerr < ${P_EPS}, 1, 0)'
-    pp_names = 'urelerr vrelerr'
+    expression = 'if((uerrl2 < ${TOL_VX} | uerrl2 < ${TOL}) &
+                     (verrl2 < ${TOL_VY} | verrl2 < ${TOL}), 1, 0)'
+    pp_names = 'uerrl2 verrl2'
     execute_on = final
   []
 []

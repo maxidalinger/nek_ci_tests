@@ -11,12 +11,16 @@ Contents
 --------
 
 .. toctree::
-
+   
+   L2norm
    ethier
    ktauChannel
    lowMach
    channel
+   shlChannel
    turbPipePeriodic
+   mv_cyl
+   conj_ht
    references
 
 Pending Cases

@@ -3,8 +3,8 @@ channel
 
 .. _channel:
 
-NekRS offers the option to solver for unsteady Stokes flow with or without variable viscosity.
-The *channel* test case excercises the Stokes flow module in NekRS through the method of manufactured solution (MMS), solved in a quasi 2D square domain with edge length equal to 2 and an arbitrary, user specified, orientation angle :math:`\alpha`.
+NekRS offers the option to solve for unsteady Stokes flow with or without variable viscosity.
+The *channel* test case exercises  the Stokes flow module in NekRS through the method of manufactured solution (MMS), solved in a quasi 2D square domain with edge length equal to 2 and an arbitrary, user-specified, orientation angle :math:`\alpha`.
 The manufactured steady state solution is given as,
 
 .. math::
@@ -14,31 +14,38 @@ The manufactured steady state solution is given as,
   u(x,y) &= u' cos(\alpha) - v' sin(\alpha) \\
   v(x,y) &= u' sin(\alpha) + v' cos(\alpha) 
 
-The manufactured variable viscosity is given as,
+The manufactured variable viscosity :math:`\nu` is given as,
 
 .. math::
 
   \nu (x,y) = \frac{1}{Re} (1 + ay)
 
-where :math:`Re` is the Reynolds number, :math:`U_0` is a user specified velocity scale and :math:`a` is a user specified viscosity scale, while :math:`u,v` are the 2D velocity components.
-The forcing function for testing the manufactured solution is, therefore, given as,
+where :math:`Re` is the Reynolds number, :math:`U_0` is a user-specified velocity scale, :math:`a` is a user-specified viscosity scale, and :math:`\{u,v\}` are the 2D velocity components in the :math:`x` and :math:`y` directions, respectively.
+The forcing function :math:`\vec{f}` for testing the manufactured solution is, therefore, given as,
 
 .. math::
 
   \vec{f} = - \nabla \nu \left(\nabla \vec{v} + \nabla \vec{v}^T \right)
 
-:numref:`fig:channel1` and :numref:`fig:channel2` show the error decay trend for the velocity components exhibiting spectral convergence for both :math:`u` and :math:`v`.
+In this case, the solution field is :math:`\phi=\{u,v\}`.
+Tests are performed using a polynomial order of 7, while the reference error obtained in Sawtooth used a polynomial order of 5.
+The CI mode 1 uses the original geometry, while the CI mode 2 rotates the geometry by :math:`45°`.
+Errors were computed at :math:`t=0.1`.
+Results for the error in the solution field using different polynomial orders are presented in :numref:`fig:channel1` and :numref:`fig:channel2` for each CI mode, respectively.
+These figures illustrate the error decay trend for the velocity components, which exhibit spectral convergence.
 
 .. _fig:channel1:
-.. figure:: figs/channel_L2.png
+.. figure:: figs/channel_1.png
   :align: center
   :figclass: align-center
+  :scale: 15%
 
-  :math:`L_2`-norm of errors
+  :math:`L_2`-norm of errors for case channel CI mode 1.
 
 .. _fig:channel2:
-.. figure:: figs/channel_Linf.png
+.. figure:: figs/channel_2.png
   :align: center
   :figclass: align-center
+  :scale: 15%
 
-  :math:`L_\infty`-norm of errors
+  :math:`L_2`-norm of errors for case channel CI mode 2.

@@ -1,0 +1,91 @@
+// Boundary conditions
+void velocityDirichletConditions(bcData *bc)
+{
+  bc->u = 6.0 * bc->y * (1.0 - bc->y);
+  bc->v = 0.0;
+  bc->w = 0.0;
+}
+
+void scalarDirichletConditions(bcData *bc)
+{
+  float Pe, q, k, HP_H, L, c1, c2, c3, c4;
+  
+  Pe   = 1000.0;         // Pecklet number
+  q    =    1.0;         // Heat source of each plate
+  k    =   10.0;         // Solid conductivity / Fluid conductivity
+  HP_H =    0.5;         // Solid plate height / Fluid height
+  L    =    8.0;         // Channel non-dimensional lenght
+  c1   = - Pe * q / k;
+  c2   = - Pe * q * HP_H;
+  c3   = 2.0 * q * HP_H;
+  c4   = - c2 * 17.0 / 70.0;
+  
+  // Fluid inlet
+  if (bc->id == 1) {
+    bc->s = c2 * (bc->y * bc->y * bc->y - 2.0 * bc->y * bc->y + 1.0) * bc->y + c4;
+  }
+  //// Fluid outlet
+  //if (bc->id == 2) {
+  //  bc->s = c2 * (bc->y * bc->y * bc->y - 2.0 * bc->y * bc->y + 1.0) * bc->y + c4 + c3 * L;
+  //}
+  
+  // Solid superior plate inlet
+  if (bc->id == 3) {
+    bc->s = c1 * (bc->y * bc->y / 2.0 - bc->y * (1.0 + HP_H) + (0.5 + HP_H)) + c4;
+  }
+  //// Solid superior plate outlet
+  //if (bc->id == 4) {
+  //  bc->s = c1 * (bc->y * bc->y / 2.0 - bc->y * (1.0 + HP_H) + (0.5 + HP_H)) + c4 + c3 * L;
+  //}
+  
+  // Solid inferior plate inlet
+  if (bc->id == 5) {
+    bc->s = c1 * (bc->y * bc->y / 2.0 + bc->y * HP_H) + c4;
+  }
+  //// Solid inferior plate outlet
+  //if (bc->id == 6) {
+  //  bc->s = c1 * (bc->y * bc->y / 2.0 + bc->y * HP_H) + c4 + c3 * L;
+  //}
+}
+
+void scalarNeumannConditions(bcData* bc)
+{
+  float Pe, q, k, HP_H, c3;
+  
+  Pe   = 1000.0;         // Pecklet number
+  q    =    1.0;         // Heat source of each plate
+  k    =   10.0;         // Solid conductivity / Fluid conductivity
+  HP_H =    0.5;         // Solid plate height / Fluid height
+  c3   = 2.0 * q * HP_H;
+  
+  if (bc->id == 2) {
+    bc->flux = c3 / Pe;
+  }
+  if (bc->id == 4) {
+    bc->flux = c3 * k / Pe;
+  }
+  if (bc->id == 6) {
+    bc->flux = c3  * k / Pe;
+  }
+  if (bc->id == 7) {
+    bc->flux = 0.0;
+  }
+}
+
+@kernel void cFill(const dlong Nelements,
+                   const dfloat CONST1,
+                   const dfloat CONST2,
+                   @ restrict const dlong *eInfo,
+                   @ restrict dfloat *QVOL)
+{
+  for (dlong e = 0; e < Nelements; ++e; @outer(0)) {
+    const dlong solid = eInfo[e];
+    for (int n = 0; n < p_Np; ++n; @inner(0)) {
+      const int id = e * p_Np + n;
+      QVOL[id] = CONST1;
+      if (solid) {
+        QVOL[id] = CONST2;
+      }
+    }
+  }
+}

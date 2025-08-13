@@ -1,0 +1,141 @@
+c-----------------------------------------------------------------------
+c   
+c   The domain consists of two plates of finite thickness (h=0.5) 
+c   with plane Poiseiulle flow moving between the plates from left 
+c   to right (x=0 to 8).
+c   
+c   The gap height is 1.0 (y=0 to 1).
+c   
+c   The flow inlet temperature is T=0 and the plates are heated
+c   with volumetric heat source, qvol = 1.
+c
+c   Insulated boundary conditions are applied on the solid
+c   surfaces that are not interior to the computational domain,
+c   so heat leaves only through advection at the flow outlet.
+c
+c-----------------------------------------------------------------------
+      subroutine userchk
+      include 'SIZE'
+      include 'TOTAL'
+
+      real err(2)
+      save err
+      COMMON /NRSSCPTR/ nrs_scptr(1)
+      integer*8         nrs_scptr
+
+      real  wrk(lx1,ly1,lz1,lelt,3)
+
+      nrs_scptr(1) = loc(err(1))
+
+      nv = nx1*ny1*nz1*nelv
+      nt = nx1*ny1*nz1*nelt
+
+      call copy(wrk(1,1,1,1,1),vx,nv)
+      call copy(wrk(1,1,1,1,2),vy,nv)
+      call copy(wrk(1,1,1,1,3), t,nt)
+c      call load_fld('nekSolution.fld')
+c      call sub2(wrk(1,1,1,1,1),vx,nv)
+c      call sub2(wrk(1,1,1,1,2),vy,nv)
+c      call sub2(wrk(1,1,1,1,3), t,nt)
+
+      err_inf = glamax(wrk(1,1,1,1,1),nv)
+      err_l2  = glsc3(wrk(1,1,1,1,1),bm1,wrk(1,1,1,1,1),nv)
+      err(1) = sqrt(err_l2)
+c      if(nid.eq.0) write(6,*) 'inf/L2 error vx:', err_inf, sqrt(err_l2)
+
+c      err_inf = glamax(wrk(1,1,1,1,2),nv)
+c      err_l2  = glsc3(wrk(1,1,1,1,2),bm1,wrk(1,1,1,1,2),nv)
+c      if(nid.eq.0) write(6,*) 'inf/L2 error vy:', err_inf, sqrt(err_l2)
+
+      err_inf = glamax(wrk(1,1,1,1,3),nt)
+      err_l2  = glsc3(wrk(1,1,1,1,3),bm2,wrk(1,1,1,1,3),nt)
+      err(2) = sqrt(err_l2)
+c      if(nid.eq.0) write(6,*) 'inf/L2 error t:', err_inf, sqrt(err_l2)
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine useric (ix,iy,iz,ieg)
+
+C     Set initial conditions
+
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+      real Pe,q,k,HP_H,c1,c2,c3,c4
+
+      ux   = 6.0*y*(1.0 - y)
+      uy   = 0.0
+      uz   = 0.0
+
+      Pe   = 1000.0         ! Pecklet number
+      q    =    1.0         ! Heat source of each plate
+      k    =   10.0         ! Solid conductivity / Fluid conductivity
+      HP_H =    0.5         ! Solid plate height / Fluid height
+      c1   = - Pe * q / k
+      c2   = - Pe * q * HP_H
+      c3   = 2.0 * q * HP_H
+      c4   = - c2 * 17.0 / 70.0
+
+      if (y.gt.1.0) then
+        temp = c1*(y**2/2.0-y*(1.0+HP_H)+(0.5+HP_H))+c4 !+c3*x
+      elseif (y.lt.0.0) then
+        temp = c1*(y**2/2.0+y*HP_H)+c4 !+c3*x
+      else
+        temp = c2*(y**4-2.0*y**3+y)+c4 !+c3*x
+      endif
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usrdat
+      include 'SIZE'
+      include 'TOTAL'
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usrdat2
+      include 'SIZE'
+      include 'TOTAL'
+
+      ! reconstruct boundary tags 
+      do iel=1,nelv
+      do ifc=1,2*ndim
+c     INLET
+         if (cbc(ifc,iel,1) .eq. 'vf1') boundaryID(ifc,iel) = 1
+c     OULET
+         if (cbc(ifc,iel,1) .eq. 'Of1') boundaryID(ifc,iel) = 2
+c     WALLS
+         if (cbc(ifc,iel,1) .eq. 'Wf1') boundaryID(ifc,iel) = 3
+         if (cbc(ifc,iel,1) .eq. 'Wf2') boundaryID(ifc,iel) = 3
+      enddo
+      enddo
+
+      do iel=1,nelt
+      do ifc=1,2*ndim
+c       INLET FLUID
+         if (cbc(ifc,iel,2) .eq. 'tf1') boundaryIDt(ifc,iel) = 1
+c       OUTLET FLUID
+         if (cbc(ifc,iel,2) .eq. 'ff1') boundaryIDt(ifc,iel) = 2
+c       INLET SUPERIOR SOLID
+         if (cbc(ifc,iel,2) .eq. 'tu1') boundaryIDt(ifc,iel) = 3
+c       OUTLET SUPERIOR SOLID
+         if (cbc(ifc,iel,2) .eq. 'tu2') boundaryIDt(ifc,iel) = 4
+c       INLET INFERIOR SOLID
+         if (cbc(ifc,iel,2) .eq. 'tl1') boundaryIDt(ifc,iel) = 5
+c       OUTLET INFERIOR SOLID
+         if (cbc(ifc,iel,2) .eq. 'tl2') boundaryIDt(ifc,iel) = 6
+c       SUPERIOR AND INFERIOR WALLS SOLID
+         if (cbc(ifc,iel,2) .eq. 'Iu1') boundaryIDt(ifc,iel) = 7
+         if (cbc(ifc,iel,2) .eq. 'Il1') boundaryIDt(ifc,iel) = 7
+      enddo
+      enddo
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usrdat3
+      return
+      end
+c-----------------------------------------------------------------------
